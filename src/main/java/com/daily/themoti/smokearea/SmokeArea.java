@@ -13,7 +13,7 @@ public class SmokeArea {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column
     private String longitude; // 경도
