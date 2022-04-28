@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long postId;
@@ -25,6 +25,12 @@ public class Post {
 
     @Builder
     public Post(String title, long userId, String content) {
+        this.title = title;
+        this.userId = userId;
+        this.content = content;
+    }
+
+    public void update(String title, long userId, String content) {
         this.title = title;
         this.userId = userId;
         this.content = content;
