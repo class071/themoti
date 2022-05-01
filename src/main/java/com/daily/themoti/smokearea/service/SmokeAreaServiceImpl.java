@@ -43,7 +43,7 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
             checkURLKey(jsonObject);
 
             JSONArray jsonArray = (JSONArray) jsonObject.get("data");
-            for(int i=0 ; i<jsonArray.size() ; i++){
+            for (int i = 0; i < jsonArray.size(); i++){
                 JSONObject object = (JSONObject) jsonArray.get(i);
                 String longitude = (String) object.get("경도");
                 String latitude = (String) object.get("위도");
