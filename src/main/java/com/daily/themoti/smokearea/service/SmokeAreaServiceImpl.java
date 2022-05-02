@@ -1,17 +1,16 @@
 package com.daily.themoti.smokearea.service;
 
-import com.daily.themoti.global.api.ApiResponse;
-import com.daily.themoti.smokearea.SmokeArea;
 import com.daily.themoti.smokearea.dto.LoadAreaResponseDto;
 import com.daily.themoti.smokearea.dto.SaveAreaRequestDto;
-import com.daily.themoti.smokearea.dto.SmokeAreaResponseDto;
 import com.daily.themoti.smokearea.exception.DataLoadFailedException;
+import com.daily.themoti.smokearea.exception.ParseFailedException;
 import com.daily.themoti.smokearea.exception.WrongURLException;
 import com.daily.themoti.smokearea.repository.SmokeAreaRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -25,9 +24,28 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
 
     private final SmokeAreaRepository smokeAreaRepository;
 
-    public LoadAreaResponseDto loadAndSaveFromApiWithJson(){
+    public LoadAreaResponseDto saveWithPoint(){
+        String result = loadFromApi();
+        JSONObject jsonObject  = parseJSON(result);
 
+        JSONArray jsonArray = (JSONArray) jsonObject.get("data");
+        for (int i = 0; i < jsonArray.size(); i++){
+            JSONObject object = (JSONObject) jsonArray.get(i);
+            String longitude = (String) object.get("경도");
+            String latitude = (String) object.get("위도");
+            SaveAreaRequestDto saveAreaRequestDto = new SaveAreaRequestDto(longitude, latitude);
+            smokeAreaRepository.save(saveAreaRequestDto.toEntity());
+        }
+
+        int loadDataAmount = (int) jsonObject.get("totalCount");
+        int savedDataAmount = (int) smokeAreaRepository.count();
+
+        return new LoadAreaResponseDto(loadDataAmount == savedDataAmount);
+    }
+
+    private String loadFromApi(){
         StringBuffer result = new StringBuffer();
+
         try{
             URL url = new URL("https://api.odcloud.kr/api/15073796/v1/uddi:17fbd06c-45bb-48aa-9be7-b26dbc708c9c?page=1&perPage=100&serviceKey=K3Rg9G3TMgSqBpVkmaTE5iLvLegNzBRpU6woyF8u6AkT%2Bie5EnKQQk8FR9uKcOHPnk7Y6MqT1azZz21d63YXrQ%3D%3D");
             HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
@@ -37,27 +55,22 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
             BufferedReader bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
             result.append(bf.readLine());
 
+            return result.toString();
+        }catch(Exception e){
+            throw new DataLoadFailedException();
+        }
+    }
+
+    private JSONObject parseJSON(String result){
+        try {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(result.toString());
 
             checkURLKey(jsonObject);
 
-            JSONArray jsonArray = (JSONArray) jsonObject.get("data");
-            for (int i = 0; i < jsonArray.size(); i++){
-                JSONObject object = (JSONObject) jsonArray.get(i);
-                String longitude = (String) object.get("경도");
-                String latitude = (String) object.get("위도");
-                SaveAreaRequestDto saveAreaRequestDto = new SaveAreaRequestDto(longitude, latitude);
-                smokeAreaRepository.save(saveAreaRequestDto.toEntity());
-            }
-
-            int loadDataAmount = (int) jsonObject.get("totalCount");
-            int savedDataAmount = (int) smokeAreaRepository.count();
-
-            return new LoadAreaResponseDto(loadDataAmount == savedDataAmount);
-
-        }catch(Exception e){
-            throw new DataLoadFailedException();
+            return jsonObject;
+        }catch(ParseException e){
+            throw new ParseFailedException();
         }
     }
 
