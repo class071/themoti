@@ -20,8 +20,8 @@ public class SmokeAreaController {
     private final SmokeAreaService smokeAreaService;
 
     @GetMapping("/api/load")
-    public ApiResponse<?> loadAndSaveFromApiWithJson(){
-        LoadAreaResponseDto loadAreaResponseDto = smokeAreaService.loadAndSaveFromApiWithJson();
+    public ApiResponse<?> loadFromApiWithJson(){
+        LoadAreaResponseDto loadAreaResponseDto = smokeAreaService.saveWithPoint();
         SuccessCode code = SuccessCode.LOAD_SUCCESS;
         return ApiResponse.success(code.name(), code.getHttpStatus(), code.getMessage(), loadAreaResponseDto);
     }
