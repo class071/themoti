@@ -7,10 +7,12 @@ import com.daily.themoti.smokearea.exception.ParseFailedException;
 import com.daily.themoti.smokearea.exception.WrongURLException;
 import com.daily.themoti.smokearea.repository.SmokeAreaRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -23,6 +25,9 @@ import java.net.URL;
 public class SmokeAreaServiceImpl implements SmokeAreaService{
 
     private final SmokeAreaRepository smokeAreaRepository;
+
+    @Value("${apikey.yongsan}")
+    private String yongsan;
 
     public LoadAreaResponseDto saveWithPoint(){
         String result = loadFromApi();
@@ -37,7 +42,7 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
             smokeAreaRepository.save(saveAreaRequestDto.toEntity());
         }
 
-        int loadDataAmount = (int) jsonObject.get("totalCount");
+        int loadDataAmount = Integer.parseInt(String.valueOf(jsonObject.get("totalCount")));
         int savedDataAmount = (int) smokeAreaRepository.count();
 
         return new LoadAreaResponseDto(loadDataAmount == savedDataAmount);
@@ -45,9 +50,8 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
 
     private String loadFromApi(){
         StringBuffer result = new StringBuffer();
-
         try{
-            URL url = new URL("https://api.odcloud.kr/api/15073796/v1/uddi:17fbd06c-45bb-48aa-9be7-b26dbc708c9c?page=1&perPage=100&serviceKey=K3Rg9G3TMgSqBpVkmaTE5iLvLegNzBRpU6woyF8u6AkT%2Bie5EnKQQk8FR9uKcOHPnk7Y6MqT1azZz21d63YXrQ%3D%3D");
+            URL url = new URL(yongsan);
             HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setRequestProperty("Content-type", "application/json");
