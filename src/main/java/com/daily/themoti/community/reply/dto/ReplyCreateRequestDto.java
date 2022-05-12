@@ -1,6 +1,6 @@
-package com.daily.themoti.community.dto;
+package com.daily.themoti.community.reply.dto;
 
-import com.daily.themoti.community.domain.Reply;
+import com.daily.themoti.community.reply.domain.Reply;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

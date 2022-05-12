@@ -1,5 +1,6 @@
-package com.daily.themoti.community.domain;
+package com.daily.themoti.community.reply.domain;
 
+import com.daily.themoti.community.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

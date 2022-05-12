@@ -1,6 +1,6 @@
-package com.daily.themoti.community.repository;
+package com.daily.themoti.community.reply.repository;
 
-import com.daily.themoti.community.domain.Reply;
+import com.daily.themoti.community.reply.domain.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

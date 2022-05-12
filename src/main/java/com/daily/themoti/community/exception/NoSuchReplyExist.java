@@ -1,4 +1,4 @@
-package com.daily.themoti.global.exception;
+package com.daily.themoti.community.exception;
 
 public class NoSuchReplyExist extends RuntimeException{
 

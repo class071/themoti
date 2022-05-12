@@ -1,9 +1,9 @@
-package com.daily.themoti.community.controller;
+package com.daily.themoti.community.reply.controller;
 
 import com.daily.themoti.global.api.ApiResponse;
-import com.daily.themoti.community.dto.ReplyCreateRequestDto;
-import com.daily.themoti.community.dto.ReplyResponseDto;
-import com.daily.themoti.community.service.ReplyService;
+import com.daily.themoti.community.reply.dto.ReplyCreateRequestDto;
+import com.daily.themoti.community.reply.dto.ReplyResponseDto;
+import com.daily.themoti.community.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

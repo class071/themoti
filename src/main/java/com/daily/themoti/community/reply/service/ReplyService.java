@@ -1,7 +1,7 @@
-package com.daily.themoti.community.service;
+package com.daily.themoti.community.reply.service;
 
-import com.daily.themoti.community.dto.ReplyCreateRequestDto;
-import com.daily.themoti.community.dto.ReplyResponseDto;
+import com.daily.themoti.community.reply.dto.ReplyCreateRequestDto;
+import com.daily.themoti.community.reply.dto.ReplyResponseDto;
 
 import java.util.List;
 
