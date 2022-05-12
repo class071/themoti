@@ -1,11 +1,10 @@
-package com.daily.themoti.community.controller;
+package com.daily.themoti.community.post.controller;
 
 import com.daily.themoti.global.api.ApiResponse;
-import com.daily.themoti.community.dto.PostCreateRequestDto;
-import com.daily.themoti.community.dto.PostResponseDto;
-import com.daily.themoti.community.dto.PostUpdateRequestDto;
-import com.daily.themoti.community.dto.ReplyResponseDto;
-import com.daily.themoti.community.service.PostService;
+import com.daily.themoti.community.post.dto.PostCreateRequestDto;
+import com.daily.themoti.community.post.dto.PostResponseDto;
+import com.daily.themoti.community.post.dto.PostUpdateRequestDto;
+import com.daily.themoti.community.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +31,7 @@ public class PostController {
     }
 
     @DeleteMapping("/api/post/{postId}")
-    public ApiResponse<ReplyResponseDto> delete(@PathVariable Long postId) {
+    public ApiResponse<PostResponseDto> delete(@PathVariable Long postId) {
         postService.delete(postId);
         return ApiResponse.success(HttpStatus.OK, postId);
     }

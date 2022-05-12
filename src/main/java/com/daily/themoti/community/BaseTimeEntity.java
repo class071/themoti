@@ -1,4 +1,4 @@
-package com.daily.themoti.community.domain;
+package com.daily.themoti.community;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
