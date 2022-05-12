@@ -1,8 +1,8 @@
-package com.daily.themoti.community.service;
+package com.daily.themoti.community.post.service;
 
-import com.daily.themoti.community.dto.PostCreateRequestDto;
-import com.daily.themoti.community.dto.PostResponseDto;
-import com.daily.themoti.community.dto.PostUpdateRequestDto;
+import com.daily.themoti.community.post.dto.PostCreateRequestDto;
+import com.daily.themoti.community.post.dto.PostResponseDto;
+import com.daily.themoti.community.post.dto.PostUpdateRequestDto;
 
 import java.util.List;
 

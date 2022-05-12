@@ -1,8 +1,8 @@
 package com.daily.themoti.global.advice;
 
 import com.daily.themoti.global.api.ApiResponse;
-import com.daily.themoti.global.exception.NoSuchPostExist;
-import com.daily.themoti.global.exception.NoSuchReplyExist;
+import com.daily.themoti.community.exception.NoSuchPostExist;
+import com.daily.themoti.community.exception.NoSuchReplyExist;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

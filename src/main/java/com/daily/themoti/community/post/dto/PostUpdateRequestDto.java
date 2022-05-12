@@ -1,4 +1,4 @@
-package com.daily.themoti.community.dto;
+package com.daily.themoti.community.post.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

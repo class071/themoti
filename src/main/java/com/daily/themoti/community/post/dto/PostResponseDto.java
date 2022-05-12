@@ -1,6 +1,6 @@
-package com.daily.themoti.community.dto;
+package com.daily.themoti.community.post.dto;
 
-import com.daily.themoti.community.domain.Post;
+import com.daily.themoti.community.post.domain.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

@@ -1,11 +1,11 @@
-package com.daily.themoti.community.service;
+package com.daily.themoti.community.post.service;
 
-import com.daily.themoti.global.exception.NoSuchPostExist;
-import com.daily.themoti.community.domain.Post;
-import com.daily.themoti.community.dto.PostCreateRequestDto;
-import com.daily.themoti.community.dto.PostResponseDto;
-import com.daily.themoti.community.dto.PostUpdateRequestDto;
-import com.daily.themoti.community.repository.PostRepository;
+import com.daily.themoti.community.exception.NoSuchPostExist;
+import com.daily.themoti.community.post.domain.Post;
+import com.daily.themoti.community.post.dto.PostCreateRequestDto;
+import com.daily.themoti.community.post.dto.PostResponseDto;
+import com.daily.themoti.community.post.dto.PostUpdateRequestDto;
+import com.daily.themoti.community.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
