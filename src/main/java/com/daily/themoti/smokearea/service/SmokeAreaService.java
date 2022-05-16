@@ -7,5 +7,4 @@ import com.daily.themoti.smokearea.dto.SmokeAreaResponseDto;
 
 public interface SmokeAreaService {
 
-    public LoadAreaResponseDto saveWithPoint();
 }
