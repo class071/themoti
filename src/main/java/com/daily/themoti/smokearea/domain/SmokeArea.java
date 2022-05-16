@@ -1,4 +1,4 @@
-package com.daily.themoti.smokearea;
+package com.daily.themoti.smokearea.domain;
 
 import lombok.Builder;
 import lombok.Getter;

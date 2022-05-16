@@ -1,9 +1,7 @@
 package com.daily.themoti.smokearea.dto;
 
-import com.daily.themoti.smokearea.SmokeArea;
+import com.daily.themoti.smokearea.domain.SmokeArea;
 import lombok.Builder;
-
-import javax.persistence.Column;
 
 public class SaveAreaRequestDto {
 
