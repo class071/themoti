@@ -44,6 +44,7 @@ public class ApiLoader implements ApplicationRunner {
         load_yongsan();
         load_kwangjin();
     }
+
     //Point
     private void load_yongsan(){
         String result = loadFromApi(YONGSAN);
@@ -62,8 +63,7 @@ public class ApiLoader implements ApplicationRunner {
     private String loadFromApi(String area){
         StringBuffer result = new StringBuffer();
         try{
-            URL url = new URL(area);
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection connection = getConnection(area);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-type", "application/json");
 
@@ -115,8 +115,8 @@ public class ApiLoader implements ApplicationRunner {
 
     private SaveAreaRequestDto changeAddressToPoint(String addr){
         String result = loadFromKakaoApi(addr);
-        try{
-            JSONObject jsonObject = parseJSON(result.toString());
+        try {
+            JSONObject jsonObject = parseJSON(result);
             JSONArray documents = (JSONArray) jsonObject.get("documents");
             JSONObject address = (JSONObject) documents.get(0);
             String longitude = (String) address.get("x");
@@ -135,9 +135,7 @@ public class ApiLoader implements ApplicationRunner {
             String str = addr.replace("~", "");
             String encodedAddr = URLEncoder.encode(str, "UTF-8");
 
-            URL url = new URL(KAKAO_URL + encodedAddr);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection connection = getConnection(KAKAO_URL + encodedAddr);
 
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Authorization", KAKAO_MAP_KEY);
@@ -155,6 +153,15 @@ public class ApiLoader implements ApplicationRunner {
             return result.toString();
         } catch (Exception e){
             throw new ParseFailedException();
+        }
+    }
+
+    private HttpURLConnection getConnection(String addr){
+        try {
+            URL url = new URL(addr);
+            return (HttpURLConnection) url.openConnection();
+        } catch (Exception e){
+            throw new WrongURLException();
         }
     }
 }
