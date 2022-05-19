@@ -2,7 +2,9 @@ package com.daily.themoti.smokearea.dto;
 
 import com.daily.themoti.smokearea.domain.SmokeArea;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class SaveAreaRequestDto {
 
     private String name;
