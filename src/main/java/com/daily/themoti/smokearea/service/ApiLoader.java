@@ -1,5 +1,6 @@
 package com.daily.themoti.smokearea.service;
 
+import com.daily.themoti.smokearea.AddressApi;
 import com.daily.themoti.smokearea.dto.SaveAreaRequestDto;
 import com.daily.themoti.smokearea.exception.DataLoadFailedException;
 import com.daily.themoti.smokearea.exception.ParseFailedException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -33,21 +35,49 @@ public class ApiLoader implements ApplicationRunner {
     @Value("${apikey.yongsan}")
     private String YONGSAN;
 
+    @Value("${apikey.yeongdeungpo}")
+    private String YEONGDEUNGPO;
+
     @Value("${apikey.kwangjin}")
     private String KWANGJIN;
+
+    @Value("${apikey.joong}")
+    private String JOONG;
+
+    @Value("${apikey.joongrang}")
+    private String JOONGRANG;
+
+    @Value("${apikey.dongjak}")
+    private String DONGJAK;
+
+    @Value("${apikey.songpa}")
+    private String SONGPA;
+
+    @Value("${apikey.seodaemoon}")
+    private String SEODAEMOON;
+
+    @Value("${apikey.dongdaemoon}")
+    private String DONGDAEMOON;
 
     @Value("${apikey.kakaomap}")
     private String KAKAO_MAP_KEY;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        load_yongsan();
-        load_kwangjin();
+        call_PointApi(YONGSAN);
+        call_PointApi(YEONGDEUNGPO);
+
+        call_AddressApi(KWANGJIN, AddressApi.KWANGJIN.getStoredAt());
+        call_AddressApi(JOONG, AddressApi.JOONG.getStoredAt());
+        call_AddressApi(JOONGRANG, AddressApi.JOONGRANG.getStoredAt());
+        call_AddressApi(DONGJAK, AddressApi.DONGJAK.getStoredAt());
+        call_AddressApi(SONGPA, AddressApi.SONGPA.getStoredAt());
+        call_AddressApi(SEODAEMOON, AddressApi.SEODAEMOON.getStoredAt());
+        call_AddressApi(DONGDAEMOON, AddressApi.DONGDAEMOON.getStoredAt());
     }
 
-    //Point
-    private void load_yongsan(){
-        String result = loadFromApi(YONGSAN);
+    private void call_PointApi(String area){
+        String result = loadFromApi(area);
         JSONObject jsonObject  = parseJSON(result);
 
         JSONArray jsonArray = (JSONArray) jsonObject.get("data");
@@ -99,17 +129,20 @@ public class ApiLoader implements ApplicationRunner {
             throw new WrongURLException();
         }
     }
-
     //Address To Point
-    private void load_kwangjin(){
-        String result = loadFromApi(KWANGJIN);
+    private void call_AddressApi(String area, String storedAt){
+        String result = loadFromApi(area);
         JSONObject jsonObject  = parseJSON(result);
 
         JSONArray jsonArray = (JSONArray) jsonObject.get("data");
         for (int i = 0; i < jsonArray.size(); i++){
             JSONObject object = (JSONObject) jsonArray.get(i);
-            String addr = (String) object.get("영업소소재지(도로 명)");
-            smokeAreaRepository.save(changeAddressToPoint(addr).toEntity()); // 바껴진 것을 통해서 save를 실행한다.
+            String addr = (String) object.get(storedAt);
+            if(changeAddressToPoint(addr).getLatitude().equals("-1")){
+                continue;
+            } else {
+                smokeAreaRepository.save(changeAddressToPoint(addr).toEntity()); // 바껴진 것을 통해서 save를 실행한다.
+            }
         }
     }
 
@@ -117,14 +150,19 @@ public class ApiLoader implements ApplicationRunner {
         String result = loadFromKakaoApi(addr);
         try {
             JSONObject jsonObject = parseJSON(result);
+            String longitude;
+            String latitude;
             JSONArray documents = (JSONArray) jsonObject.get("documents");
-            JSONObject address = (JSONObject) documents.get(0);
-            String longitude = (String) address.get("x");
-            String latitude = (String) address.get("y");
-
-            SaveAreaRequestDto saveAreaRequestDto = new SaveAreaRequestDto(longitude,latitude);
-            return saveAreaRequestDto;
-        } catch(Exception e){
+            if (!ObjectUtils.isEmpty(documents)) {
+                JSONObject address = (JSONObject) documents.get(0);
+                longitude = (String) address.get("x");
+                latitude = (String) address.get("y");
+            } else {
+                longitude = "-1";
+                latitude = "-1";
+            }
+            return new SaveAreaRequestDto(longitude, latitude);
+        } catch (Exception e){
             e.printStackTrace();
             throw new ParseFailedException();
         }
@@ -152,6 +190,7 @@ public class ApiLoader implements ApplicationRunner {
             }
             return result.toString();
         } catch (Exception e){
+            e.printStackTrace();
             throw new ParseFailedException();
         }
     }
