@@ -6,6 +6,7 @@ import com.daily.themoti.smokearea.repository.SmokeAreaRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
     private final SmokeAreaRepository smokeAreaRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<SmokeAreaResponseDto> findAll() {
         List<SmokeArea> areas = smokeAreaRepository.findAll();
         return areas.stream()
@@ -25,6 +27,7 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SmokeAreaResponseDto> findByArea(long area) {
         List<SmokeArea> smokeAreas = smokeAreaRepository.findByArea(area);
         return smokeAreas.stream()
