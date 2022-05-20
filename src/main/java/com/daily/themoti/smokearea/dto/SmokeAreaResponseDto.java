@@ -8,11 +8,11 @@ public class SmokeAreaResponseDto {
 
     private String longitude; // 경도
     private String latitude; // 위도
-    private long areaNumber;
+    private long area;
 
     public SmokeAreaResponseDto(SmokeArea smokeArea){
         this.longitude = smokeArea.getLongitude();
         this.latitude = smokeArea.getLatitude();
-        this.areaNumber = smokeArea.getAreaNumber();
+        this.area = smokeArea.getArea();
     }
 }

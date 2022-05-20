@@ -9,20 +9,20 @@ public class SaveAreaRequestDto {
 
     private String longitude; // 경도
     private String latitude; // 위도
-    private long areaNumber;
+    private long area;
 
     @Builder
-    public SaveAreaRequestDto(String longitude, String latitude, long areaNumber){
+    public SaveAreaRequestDto(String longitude, String latitude, long area){
         this.longitude = longitude;
         this.latitude = latitude;
-        this.areaNumber = areaNumber;
+        this.area = area;
     }
 
     public SmokeArea toEntity(){
         return SmokeArea.builder()
                 .longitude(longitude)
                 .latitude(latitude)
-                .areaNumber(areaNumber)
+                .area(area)
                 .build();
     }
 }

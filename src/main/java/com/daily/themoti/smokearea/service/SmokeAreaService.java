@@ -7,5 +7,5 @@ import java.util.List;
 public interface SmokeAreaService {
 
     List<SmokeAreaResponseDto> findAll();
-    List<SmokeAreaResponseDto> findByArea(long api);
+    List<SmokeAreaResponseDto> findByArea(long area);
 }
