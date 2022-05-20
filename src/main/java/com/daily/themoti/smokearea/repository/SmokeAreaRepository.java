@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SmokeAreaRepository extends JpaRepository<SmokeArea, Long> {
 
-    List<SmokeArea> findByAreaNumber(long areaNumber);
+    List<SmokeArea> findByArea(long area);
 }

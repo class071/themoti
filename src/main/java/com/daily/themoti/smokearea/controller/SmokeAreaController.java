@@ -19,13 +19,13 @@ public class SmokeAreaController {
 
     private final SmokeAreaService smokeAreaService;
 
-    @GetMapping("/all/")
+    @GetMapping("/all")
     public List<SmokeAreaResponseDto> findAll(){
         return smokeAreaService.findAll();
     }
 
     @GetMapping("/{area}")
-    public List<SmokeAreaResponseDto> findByArea(@PathVariable long api){
-        return smokeAreaService.findByArea(api);
+    public List<SmokeAreaResponseDto> findByArea(@PathVariable long area){
+        return smokeAreaService.findByArea(area);
     }
 }

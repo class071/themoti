@@ -25,9 +25,9 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
     }
 
     @Override
-    public List<SmokeAreaResponseDto> findByArea(long api) {
-        List<SmokeArea> areas = smokeAreaRepository.findByAreaNumber(api);
-        return areas.stream()
+    public List<SmokeAreaResponseDto> findByArea(long area) {
+        List<SmokeArea> smokeAreas = smokeAreaRepository.findByArea(area);
+        return smokeAreas.stream()
                 .map(SmokeAreaResponseDto::new)
                 .collect(Collectors.toList());
     }

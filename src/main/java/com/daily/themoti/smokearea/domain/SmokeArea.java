@@ -22,12 +22,12 @@ public class SmokeArea {
     private String latitude; // 위도
 
     @Column
-    private long areaNumber;
+    private Long area;
 
     @Builder
-    public SmokeArea(String longitude, String latitude, Long areaNumber){
+    public SmokeArea(String longitude, String latitude, Long area){
         this.longitude = longitude;
         this.latitude = latitude;
-        this.areaNumber = areaNumber;
+        this.area = area;
     }
 }
