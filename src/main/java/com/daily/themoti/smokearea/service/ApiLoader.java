@@ -64,19 +64,19 @@ public class ApiLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        call_PointApi(YONGSAN);
-        call_PointApi(YEONGDEUNGPO);
+        call_PointApi(YONGSAN, 1);
+        call_PointApi(YEONGDEUNGPO, 2);
 
-        call_AddressApi(KWANGJIN, AddressApi.KWANGJIN.getStoredAt());
-        call_AddressApi(JOONG, AddressApi.JOONG.getStoredAt());
-        call_AddressApi(JOONGRANG, AddressApi.JOONGRANG.getStoredAt());
-        call_AddressApi(DONGJAK, AddressApi.DONGJAK.getStoredAt());
-        call_AddressApi(SONGPA, AddressApi.SONGPA.getStoredAt());
-        call_AddressApi(SEODAEMOON, AddressApi.SEODAEMOON.getStoredAt());
-        call_AddressApi(DONGDAEMOON, AddressApi.DONGDAEMOON.getStoredAt());
+        call_AddressApi(KWANGJIN, AddressApi.KWANGJIN.getStoredAt(), 3);
+        call_AddressApi(JOONG, AddressApi.JOONG.getStoredAt(), 4);
+        call_AddressApi(JOONGRANG, AddressApi.JOONGRANG.getStoredAt(), 5);
+        call_AddressApi(DONGJAK, AddressApi.DONGJAK.getStoredAt(), 6);
+        call_AddressApi(SONGPA, AddressApi.SONGPA.getStoredAt(), 7);
+        call_AddressApi(SEODAEMOON, AddressApi.SEODAEMOON.getStoredAt(), 8);
+        call_AddressApi(DONGDAEMOON, AddressApi.DONGDAEMOON.getStoredAt(), 9);
     }
 
-    private void call_PointApi(String area){
+    private void call_PointApi(String area, long areaNumber){
         String result = loadFromApi(area);
         JSONObject jsonObject  = parseJSON(result);
 
@@ -85,7 +85,7 @@ public class ApiLoader implements ApplicationRunner {
             JSONObject object = (JSONObject) jsonArray.get(i);
             String longitude = (String) object.get("경도");
             String latitude = (String) object.get("위도");
-            SaveAreaRequestDto saveAreaRequestDto = new SaveAreaRequestDto(longitude, latitude);
+            SaveAreaRequestDto saveAreaRequestDto = new SaveAreaRequestDto(longitude, latitude, areaNumber);
             smokeAreaRepository.save(saveAreaRequestDto.toEntity());
         }
     }
@@ -130,7 +130,7 @@ public class ApiLoader implements ApplicationRunner {
         }
     }
     //Address To Point
-    private void call_AddressApi(String area, String storedAt){
+    private void call_AddressApi(String area, String storedAt, long areaNumber){
         String result = loadFromApi(area);
         JSONObject jsonObject  = parseJSON(result);
 
@@ -138,15 +138,15 @@ public class ApiLoader implements ApplicationRunner {
         for (int i = 0; i < jsonArray.size(); i++){
             JSONObject object = (JSONObject) jsonArray.get(i);
             String addr = (String) object.get(storedAt);
-            if(changeAddressToPoint(addr).getLatitude().equals("-1")){
+            if(changeAddressToPoint(addr, areaNumber).getLatitude().equals("-1")){
                 continue;
             } else {
-                smokeAreaRepository.save(changeAddressToPoint(addr).toEntity()); // 바껴진 것을 통해서 save를 실행한다.
+                smokeAreaRepository.save(changeAddressToPoint(addr, areaNumber).toEntity()); // 바껴진 것을 통해서 save를 실행한다.
             }
         }
     }
 
-    private SaveAreaRequestDto changeAddressToPoint(String addr){
+    private SaveAreaRequestDto changeAddressToPoint(String addr, long areaNumber){
         String result = loadFromKakaoApi(addr);
         try {
             JSONObject jsonObject = parseJSON(result);
@@ -161,7 +161,7 @@ public class ApiLoader implements ApplicationRunner {
                 longitude = "-1";
                 latitude = "-1";
             }
-            return new SaveAreaRequestDto(longitude, latitude);
+            return new SaveAreaRequestDto(longitude, latitude, areaNumber);
         } catch (Exception e){
             e.printStackTrace();
             throw new ParseFailedException();
