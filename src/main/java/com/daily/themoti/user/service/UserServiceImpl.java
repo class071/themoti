@@ -1,8 +1,12 @@
 
 package com.daily.themoti.user.service;
 
+import com.daily.themoti.jwt.TokenService;
 import com.daily.themoti.smokearea.exception.ParseFailedException;
 import com.daily.themoti.user.dto.KakaoUserInfo;
+import com.daily.themoti.user.dto.LoginResponse;
+import com.daily.themoti.user.dto.RefreshTokenResponse;
+import com.daily.themoti.user.exception.AuthenticationEntryPointException;
 import com.daily.themoti.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -26,6 +30,7 @@ import java.net.URL;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final TokenService tokenService;
 
     @Value("${apikey.kakao.rest.api.key}")
     private String KAKAO_REST_API_KEY;
@@ -73,7 +78,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void loginWithAccessToken(String token) {
+    public LoginResponse loginWithAccessToken(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + token);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -106,6 +111,8 @@ public class UserServiceImpl implements UserService{
         if(!userRepository.findByEmail(email).isPresent()){
             userRepository.save(kakaoUserInfo.toEntity());
         }
+
+        return createJwtToken(email);
     }
 
     private JSONObject parseJSON(String result){
@@ -116,6 +123,28 @@ public class UserServiceImpl implements UserService{
             return jsonObject;
         } catch(ParseException e){
             throw new ParseFailedException();
+        }
+    }
+
+    public LoginResponse createJwtToken(String email){
+        String accessToken = tokenService.createAccessToken(email);
+        String refreshToken = tokenService.createRefreshToken(email);
+
+        LoginResponse loginResponse = new LoginResponse(accessToken, refreshToken);
+        return loginResponse;
+    }
+
+    @Override
+    public RefreshTokenResponse refreshToken(String rToken) {
+        validateRefreshToken(rToken);
+        String subject = tokenService.extractRefreshTokenSubject(rToken);
+        String accessToken = tokenService.createAccessToken(subject);
+        return new RefreshTokenResponse(accessToken);
+    }
+
+    private void validateRefreshToken(String rToken) {
+        if (!tokenService.validateRefreshToken(rToken)) {
+            throw new AuthenticationEntryPointException("유효하지 않은 refresh token 입니다.");
         }
     }
 }
