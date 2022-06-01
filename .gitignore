@@ -39,3 +39,5 @@ out/
 ### Key Properties ###
 **/application-apikey.properties
 application-apikey.properties
+
+logs/
