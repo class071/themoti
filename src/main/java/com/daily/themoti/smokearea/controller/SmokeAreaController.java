@@ -22,13 +22,13 @@ public class SmokeAreaController {
     private final SmokeAreaService smokeAreaService;
 
     @GetMapping("/all")
-    public ApiResponse<SmokeAreaResponseDto> findAll(){
+    public ApiResponse<List<SmokeAreaResponseDto>> findAll() {
         List<SmokeAreaResponseDto> dtos = smokeAreaService.findAll();
         return ApiResponse.success(HttpStatus.OK, dtos);
     }
 
     @GetMapping("/{area}")
-    public ApiResponse<SmokeAreaResponseDto> findByArea(@PathVariable long area){
+    public ApiResponse<List<SmokeAreaResponseDto>> findByArea(@PathVariable long area){
         List<SmokeAreaResponseDto> dtos = smokeAreaService.findByArea(area);
         return ApiResponse.success(HttpStatus.OK, dtos);
     }
