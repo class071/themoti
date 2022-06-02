@@ -2,11 +2,16 @@
 package com.daily.themoti.user.service;
 
 import com.daily.themoti.jwt.TokenService;
+import com.daily.themoti.jwt.config.CustomUserDetails;
 import com.daily.themoti.smokearea.exception.ParseFailedException;
+import com.daily.themoti.user.domain.User;
 import com.daily.themoti.user.dto.KakaoUserInfo;
 import com.daily.themoti.user.dto.LoginResponse;
 import com.daily.themoti.user.dto.RefreshTokenResponse;
+import com.daily.themoti.user.dto.UserResponseDto;
 import com.daily.themoti.user.exception.AuthenticationEntryPointException;
+import com.daily.themoti.user.exception.UnauthorizedUserException;
+import com.daily.themoti.user.exception.UserNotExistException;
 import com.daily.themoti.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -16,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
@@ -145,6 +151,32 @@ public class UserServiceImpl implements UserService{
     private void validateRefreshToken(String rToken) {
         if (!tokenService.validateRefreshToken(rToken)) {
             throw new AuthenticationEntryPointException("유효하지 않은 refresh token 입니다.");
+        }
+    }
+
+    @Override
+    public UserResponseDto getUserInfo() {
+        try {
+            CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String email = customUserDetails.getEmail();
+            User user = userRepository.findByEmail(email).orElseThrow(UserNotExistException::new);
+            return new UserResponseDto(user);
+        } catch(IllegalStateException e){
+            throw new UnauthorizedUserException("권한에 맞지 않는 요청이거나 로그인 되어 있지 않습니다.");
+        }
+    }
+
+    public boolean checkUser(Long id){
+        try {
+            CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String email = customUserDetails.getEmail();
+            Long storedId = userRepository.findByEmail(email).get().getId();
+            if (id != storedId){
+                throw new UnauthorizedUserException("요청된 유저의 ID와 현재 유저의 ID가 일치하지 않습니다.");
+            }
+            return true;
+        } catch(IllegalStateException e){
+            throw new UnauthorizedUserException("권한에 맞지 않는 요청이거나 로그인 되어 있지 않습니다.");
         }
     }
 }
