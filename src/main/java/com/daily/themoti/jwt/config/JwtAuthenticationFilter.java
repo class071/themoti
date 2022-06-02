@@ -38,8 +38,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     private void setAuthentication(String token) {
-        String userId = tokenService.extractAccessTokenSubject(token);
-        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(userId);
+        String email = tokenService.extractAccessTokenSubject(token);
+        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
         SecurityContextHolder.getContext().setAuthentication(new CustomAuthenticationToken(userDetails, userDetails.getAuthorities()));
     }
 }
