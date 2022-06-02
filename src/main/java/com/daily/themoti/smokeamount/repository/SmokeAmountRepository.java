@@ -10,4 +10,8 @@ public interface SmokeAmountRepository extends JpaRepository<SmokeAmount, Long> 
     List<SmokeAmount> findByUserIdAndYearAndMonthAndDay(Long userId, int year, int month, int day);
 
     List<SmokeAmount> findByUserIdAndYearAndMonth(Long userId, int year, int month);
+
+    List<SmokeAmount> findByUserIdAndYear(Long userId, int year);
+
+    List<SmokeAmount> findByUserId(Long userId);
 }

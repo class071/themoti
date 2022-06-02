@@ -39,4 +39,17 @@ public class SmokeAmountController {
         List<SmokeAmountResponseDto> dtos = smokeAmountService.findByMonth(userId, year, month);
         return ApiResponse.success(HttpStatus.OK, dtos);
     }
+
+    @GetMapping("/api/smoke-amount/year/{userId}")
+    public ApiResponse<List<SmokeAmountResponseDto>> findByYear(@PathVariable Long userId,
+                                                                @RequestParam int year) {
+        List<SmokeAmountResponseDto> dtos = smokeAmountService.findByYear(userId, year);
+        return ApiResponse.success(HttpStatus.OK, dtos);
+    }
+
+    @GetMapping("/api/smoke-amount/all/{userId}")
+    public ApiResponse<List<SmokeAmountResponseDto>> findByUserId(@PathVariable Long userId) {
+        List<SmokeAmountResponseDto> dtos = smokeAmountService.findByUserId(userId);
+        return ApiResponse.success(HttpStatus.OK, dtos);
+    }
 }
