@@ -43,4 +43,20 @@ public class SmokeAmountServiceImpl implements SmokeAmountService {
                 .map(SmokeAmountResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<SmokeAmountResponseDto> findByYear(Long userId, int year) {
+        List<SmokeAmount> amounts = smokeAmountRepository.findByUserIdAndYear(userId, year);
+        return amounts.stream()
+                .map(SmokeAmountResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SmokeAmountResponseDto> findByUserId(Long userId) {
+        List<SmokeAmount> amounts = smokeAmountRepository.findByUserId(userId);
+        return amounts.stream()
+                .map(SmokeAmountResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }

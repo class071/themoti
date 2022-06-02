@@ -12,4 +12,8 @@ public interface SmokeAmountService {
     List<SmokeAmountResponseDto> findByDay(Long userId, int year, int month, int day);
 
     List<SmokeAmountResponseDto> findByMonth(Long userId, int year, int month);
+
+    List<SmokeAmountResponseDto> findByYear(Long userId, int year);
+
+    List<SmokeAmountResponseDto> findByUserId(Long userId);
 }
