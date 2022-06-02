@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/login/**", "/user/kakao/oauth").permitAll()
                 .antMatchers(HttpMethod.POST, "/refresh").permitAll()
+                .antMatchers("/api/userinfo").authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
