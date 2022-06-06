@@ -29,6 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Set<UserRole> userRole = new HashSet<>();
         userRole.add(user.getRole());
         return new CustomUserDetails(
+                String.valueOf(user.getId()),
                 String.valueOf(user.getEmail()),
                 userRole.stream().map(role -> role.getKey())
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toSet())
