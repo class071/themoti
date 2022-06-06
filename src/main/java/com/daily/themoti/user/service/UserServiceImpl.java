@@ -165,18 +165,4 @@ public class UserServiceImpl implements UserService{
             throw new UnauthorizedUserException("권한에 맞지 않는 요청이거나 로그인 되어 있지 않습니다.");
         }
     }
-
-    public boolean checkUser(Long id){
-        try {
-            CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String email = customUserDetails.getEmail();
-            Long storedId = userRepository.findByEmail(email).get().getId();
-            if (id != storedId){
-                throw new UnauthorizedUserException("요청된 유저의 ID와 현재 유저의 ID가 일치하지 않습니다.");
-            }
-            return true;
-        } catch(IllegalStateException e){
-            throw new UnauthorizedUserException("권한에 맞지 않는 요청이거나 로그인 되어 있지 않습니다.");
-        }
-    }
 }
