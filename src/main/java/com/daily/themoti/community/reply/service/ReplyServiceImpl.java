@@ -8,6 +8,7 @@ import com.daily.themoti.community.reply.dto.ReplyCreateRequestDto;
 import com.daily.themoti.community.reply.dto.ReplyResponseDto;
 import com.daily.themoti.community.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Transactional
+    @PreAuthorize("@replyGuard.check(#replyId)")
     @Override
     public void delete(Long replyId) {
         Reply reply = replyRepository.findById(replyId)

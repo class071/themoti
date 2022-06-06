@@ -7,6 +7,7 @@ import com.daily.themoti.community.post.dto.PostResponseDto;
 import com.daily.themoti.community.post.dto.PostUpdateRequestDto;
 import com.daily.themoti.community.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional
+    @PreAuthorize("postGuard.check(#postId)")
     @Override
     public void delete(Long postId) {
         Post post = postRepository.findById(postId)
@@ -42,6 +44,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional
+    @PreAuthorize("@postGuard.check(#postId)")
     @Override
     public PostResponseDto update(Long postId, PostUpdateRequestDto postUpdateRequestDto) {
         Post updatePost = postRepository.findById(postId)
