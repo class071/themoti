@@ -12,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
+    private final String userId;
     private final String email;
     private final Set<GrantedAuthority> authorities;
 
@@ -27,7 +28,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return userId;
     }
 
     @Override
