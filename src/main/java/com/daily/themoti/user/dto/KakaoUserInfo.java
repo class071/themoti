@@ -11,11 +11,15 @@ public class KakaoUserInfo {
 
     String email;
     String nickname;
+    String profileImageURL;
+    String thumbnailURL;
 
     public User toEntity(){
         return User.builder()
                 .email(email)
                 .username(nickname)
+                .profileImageURL(profileImageURL)
+                .thumbnailURL(thumbnailURL)
                 .role(UserRole.USER)
                 .build();
     }
