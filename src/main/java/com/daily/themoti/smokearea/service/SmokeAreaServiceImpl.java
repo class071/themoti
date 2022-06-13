@@ -1,6 +1,7 @@
 package com.daily.themoti.smokearea.service;
 
 import com.daily.themoti.smokearea.domain.SmokeArea;
+import com.daily.themoti.smokearea.dto.SaveAreaRequestDto;
 import com.daily.themoti.smokearea.dto.SmokeAreaResponseDto;
 import com.daily.themoti.smokearea.repository.SmokeAreaRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,12 @@ public class SmokeAreaServiceImpl implements SmokeAreaService{
         return smokeAreas.stream()
                 .map(SmokeAreaResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public SmokeAreaResponseDto addArea(SaveAreaRequestDto saveAreaRequestDto) {
+        SmokeArea newSmokeArea = smokeAreaRepository.save(saveAreaRequestDto.toEntity());
+        return new SmokeAreaResponseDto(newSmokeArea);
     }
 }
