@@ -7,6 +7,9 @@ import com.daily.themoti.community.reply.domain.Reply;
 import com.daily.themoti.community.reply.dto.ReplyCreateRequestDto;
 import com.daily.themoti.community.reply.dto.ReplyResponseDto;
 import com.daily.themoti.community.reply.repository.ReplyRepository;
+import com.daily.themoti.user.domain.User;
+import com.daily.themoti.user.exception.UserNotExistException;
+import com.daily.themoti.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     private final PostRepository postRepository;
     private final ReplyRepository replyRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     @Override
@@ -28,6 +32,9 @@ public class ReplyServiceImpl implements ReplyService {
         postRepository.findById(replyCreateRequestDto.getPostId())
                 .orElseThrow(() -> new NoSuchPostExist());
         Reply newReply = replyRepository.save(replyCreateRequestDto.toEntity());
+        User user = userRepository.findById(replyCreateRequestDto.getUserId())
+                .orElseThrow(() -> new UserNotExistException());
+        newReply.setUserProfile(user.getUsername(), user.getThumbnailURL());
         return new ReplyResponseDto(newReply);
     }
 
