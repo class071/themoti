@@ -6,6 +6,9 @@ import com.daily.themoti.community.post.dto.PostCreateRequestDto;
 import com.daily.themoti.community.post.dto.PostResponseDto;
 import com.daily.themoti.community.post.dto.PostUpdateRequestDto;
 import com.daily.themoti.community.post.repository.PostRepository;
+import com.daily.themoti.user.domain.User;
+import com.daily.themoti.user.exception.UserNotExistException;
+import com.daily.themoti.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -19,11 +22,15 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     @Override
     public PostResponseDto create(PostCreateRequestDto postCreateRequestDto) {
         Post newPost = postRepository.save(postCreateRequestDto.toEntity());
+        User user = userRepository.findById(postCreateRequestDto.getUserId())
+                .orElseThrow(() -> new UserNotExistException());
+        newPost.setUserProfile(user.getUsername(), user.getThumbnailURL());
         return new PostResponseDto(newPost);
     }
 
@@ -49,7 +56,7 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto update(Long postId, PostUpdateRequestDto postUpdateRequestDto) {
         Post updatePost = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchPostExist());
-        updatePost.update(postUpdateRequestDto.getTitle(), postUpdateRequestDto.getContent());
+        updatePost.update(postUpdateRequestDto.getContent());
         return new PostResponseDto(updatePost);
     }
 
