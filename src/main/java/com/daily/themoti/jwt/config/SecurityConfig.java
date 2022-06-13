@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers(HttpMethod.DELETE, "/api/reply/{replyId}").authenticated()
                         .antMatchers(HttpMethod.GET, "/api/reply/{postId}").permitAll()
                         .antMatchers(HttpMethod.GET, "/area/all", "/area/{area}").permitAll()
+                        .antMatchers(HttpMethod.POST, "/area/add").authenticated()
                 .and()
                     .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
