@@ -16,6 +16,10 @@ public class ReplyResponseDto {
 
     private Long userId;
 
+    private String nickname;
+
+    private String thumbnailURL;
+
     private LocalDateTime createdDate;
 
     private LocalDateTime modifiedDate;
@@ -25,6 +29,8 @@ public class ReplyResponseDto {
         this.replyContent = reply.getReplyContent();
         this.postId = reply.getPostId();
         this.userId = reply.getUserId();
+        this.nickname = reply.getNickname();
+        this.thumbnailURL = reply.getThumbnailURL();
         this.createdDate = reply.getCreatedDate();
         this.modifiedDate = reply.getModifiedDate();
     }

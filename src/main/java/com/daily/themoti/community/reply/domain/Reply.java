@@ -24,10 +24,21 @@ public class Reply extends BaseTimeEntity {
     @Column(nullable = false)
     private Long userId;
 
+    private String nickname;
+
+    private String thumbnailURL;
+
     @Builder
-    public Reply(String replyContent, Long postId, Long userId) {
+    public Reply(String replyContent, Long postId, Long userId, String nickname, String thumbnailURL) {
         this.replyContent = replyContent;
         this.postId = postId;
         this.userId = userId;
+        this.nickname = nickname;
+        this.thumbnailURL = thumbnailURL;
+    }
+
+    public void setUserProfile(String nickname, String thumbnailURL) {
+        this.nickname = nickname;
+        this.thumbnailURL = thumbnailURL;
     }
 }
