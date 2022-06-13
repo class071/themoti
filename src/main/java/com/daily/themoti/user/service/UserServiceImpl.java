@@ -112,8 +112,10 @@ public class UserServiceImpl implements UserService{
         JSONObject profile = (JSONObject) kakao_account.get("profile");
         String email = (String) kakao_account.get("email");
         String nickname = (String) profile.get("nickname");
+        String profileImageURL = (String) profile.get("profile_image_url");
+        String thumbnailURL = (String) profile.get("thumbnail_image_url");
 
-        KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(email, nickname);
+        KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(email, nickname, profileImageURL, thumbnailURL);
         if(!userRepository.findByEmail(email).isPresent()){
             userRepository.save(kakaoUserInfo.toEntity());
         }
