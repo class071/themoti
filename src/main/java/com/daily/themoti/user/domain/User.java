@@ -22,13 +22,21 @@ public class User {
     @Column
     private String username;
 
+    @Column
+    private String profileImageURL;
+
+    @Column
+    private String thumbnailURL;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Builder
-    public User(String username, String email, UserRole role){
+    public User(String username, String email, String profileImageURL, String thumbnailURL, UserRole role){
         this.username = username;
         this.email = email;
+        this.profileImageURL = profileImageURL;
+        this.thumbnailURL = thumbnailURL;
         this.role = role;
     }
 }
