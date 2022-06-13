@@ -15,24 +15,30 @@ public class Post extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @Column(length = 50, nullable = false)
-    private String title;
-
     @Column(length = 500, nullable = false)
     private String content;
 
     @Column(nullable = false)
     private Long userId;
 
+    private String nickname;
+
+    private String thumbnailURL;
+
     @Builder
-    public Post(String title, String content, Long userId) {
-        this.title = title;
+    public Post(String content, Long userId, String nickname, String thumbnailURL) {
         this.content = content;
         this.userId = userId;
+        this.nickname = nickname;
+        this.thumbnailURL = thumbnailURL;
     }
 
-    public void update(String title, String content) {
-        this.title = title;
+    public void update(String content) {
         this.content = content;
+    }
+
+    public void setUserProfile(String nickname, String thumbnailURL) {
+        this.nickname = nickname;
+        this.thumbnailURL = thumbnailURL;
     }
 }
